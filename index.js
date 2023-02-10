@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(bodyParser.json());
 
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
@@ -19,13 +19,15 @@ bot.on('text', ctx => {
 })
 bot.launch()
 
-let textSend='Привет!';
+let textSend="jhgjhgfjhfgjhhgjghjgh";
 let token=process.env.BOT_TOKEN;
 let chatId=process.env.CHAT_ID;
 
 app.get('/api/text', (req, res) => {
-    res.send('Hello. I changed this text')
-    PostText(token,chatId,"hfjfjhfjh");
+
+    PostText(token,chatId,textSend);
+
+    // return res.status(200).json({Auth: 0})
 })
 
 
@@ -34,24 +36,13 @@ async function PostText(token,chatId,textSend ) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
             chat_id: chatId,
-            text: textSend
+            text: '<b>TEST</b> <a href="https://www.youtube.com/watch?v=CsRqP3xlE8E">inline URL</a>',
+            parse_mode: 'HTML'
         });
     } catch (error) {
         console.error(error);
     }
 }
-
-
-
-
-app.get('/send', (req, res) => {
-    axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
-        chat_id: process.env.CHAT_ID,
-       text: 'Telegram bot'
-    });
-    res.send('send message');
-});
-
 
 
 
