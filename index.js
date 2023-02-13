@@ -19,7 +19,7 @@ bot.on('text', ctx => {
 })
 bot.launch()
 
-let textSend="jhgjhgfjhfgjhhgjghjgh";
+let textSend="Привет, я бот";
 let token=process.env.BOT_TOKEN;
 let chatId=process.env.CHAT_ID;
 
