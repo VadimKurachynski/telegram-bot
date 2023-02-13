@@ -7,7 +7,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.json());
-
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
