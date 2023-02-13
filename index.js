@@ -29,7 +29,6 @@ app.get('/api/text', (req, res) => {
 
     // return res.status(200).json({Auth: 0})
 })
-
 async function PostText(token,chatId,textSend ) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
