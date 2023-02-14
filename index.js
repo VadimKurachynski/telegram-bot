@@ -25,7 +25,6 @@ let chatId=process.env.CHAT_ID;
 app.get('/api/text', (req, res) => {
 
     PostText(token,chatId,textSend);
-
     // return res.status(200).json({Auth: 0})
 })
 async function PostText(token,chatId,textSend ) {
