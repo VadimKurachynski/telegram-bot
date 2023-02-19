@@ -16,15 +16,29 @@ bot.start(ctx => {
 bot.on('text', ctx => {
     ctx.reply('just text')
 })
+
+bot.on('photo', ctx => {
+
+    ctx.reply("photo")
+    console.log(ctx.message.photo.file_id)
+
+})
+
+
+
+
 bot.launch()
 let textSend="Привет, я бот";
 let token=process.env.BOT_TOKEN;
 let chatId=process.env.CHAT_ID;
 
+
 app.get('/api/text', (req, res) => {
     PostText(token,chatId,textSend);
     // return res.status(200).json({Auth: 0})
 })
+
+
 async function PostText(token,chatId,textSend ) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
