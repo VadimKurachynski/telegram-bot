@@ -17,12 +17,11 @@ bot.on('text', ctx => {
     ctx.reply('just text')
 })
 
-bot.on('photo', ctx => {
+// bot.on('photo', ctx => {
+//     ctx.reply("photo")
+//     console.log(ctx.message)
+// })
 
-    ctx.reply("photo")
-    console.log(ctx.message.photo.file_id)
-
-})
 
 
 
@@ -39,6 +38,27 @@ app.get('/api/text', (req, res) => {
 })
 
 
+bot.on('photo', async (doc) => {
+    const fileId = doc.update.message.photo[2].file_id;
+    const res = await axios.get(
+        `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
+    );
+    const filePath=res.data.result.file_path;
+    console.log(filePath);
+
+
+    const downloadURL =
+        `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${filePath}`;
+    console.log(downloadURL);
+    // download(downloadURL, path.join(__dirname, `${fileId}.jpg`), () =>
+    //     console.log('Done!')
+    // );
+});
+
+
+
+
+
 async function PostText(token,chatId,textSend ) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -50,5 +70,14 @@ async function PostText(token,chatId,textSend ) {
         console.error(error);
     }
 }
+
+
+
+
+
+
+
+
+
 
 app.listen(PORT, () => console.log(`My server is running on port ${PORT}`))
