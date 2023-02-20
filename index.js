@@ -3,9 +3,13 @@ require('dotenv').config();
 const {Telegraf} = require('telegraf');
 PORT = process.env.PORT;
 const app = express();
+const download = require('download');
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
-
+const fs = require('fs');
+const path = require("path");
+const http = require('https');
+request = require('request');
 
 bot.start(ctx => {
     ctx.reply('Welcome, bro')
@@ -33,29 +37,59 @@ app.get('/api/text', (req, res) => {
 })
 
 
-bot.on('photo', async (msg) => {
-    console.log(msg)
-    const length = msg.update.message.photo.length;// кол-во вариантов картинок
-    const fileId = msg.update.message.photo[length - 1].file_id; //вариант с большим размером
-    const caption = msg.update.message.caption;// текст сообщения
-    const timeDate = msg.update.message.date;// текст сообщения
-    const dateMsg=new Date(timeDate*1000).toLocaleString();//дата сообщения
-
+bot.on(['photo'], async (msg) => {
+    const length = msg.update.message.photo.length;//кол-во вариантов картинок
+    const fileId = msg.update.message.photo[length - 1].file_id;//вариант с большим размером
+    const caption = msg.update.message.caption;//текст сообщения
+    const dateMsg = new Date(msg.update.message.date * 1000).toLocaleString();//дата сообщения
+    const idUser = msg.update.message.from.id;// id пользователя
+    const nameUser = msg.update.message.from.first_name; // имя пользователя
 
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
     const filePath = res.data.result.file_path;
-    console.log(filePath);
+    const fileSize = res.data.result.file_size;
+    const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
+    const pathSaveFile=path.join(__dirname+"/imgmessage", `${fileId}.jpg`);
 
 
-    const downloadURL =
-        `https://api.telegram.org/file/bot${token}/${filePath}`;
-    console.log(downloadURL);
-    // download(downloadURL, path.join(__dirname, `${fileId}.jpg`), () =>
-    //     console.log('Done!')
-    // );
+    const download3 = function(uri, filename, callback){
+        request.head(uri, function(err, res, body){
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
+            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        });
+    };
+    download3(downloadURL, pathSaveFile, function(){
+        console.log('done');
+    });
+
+
+
+
+
+
+//await download2(downloadURL, path2);
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
+
+
+
+
+
 
 
 async function PostText(token, chatId, textSend) {
