@@ -47,7 +47,7 @@ bot.on(['photo'], async (msg) => {
     const filePath = res.data.result.file_path;
     const fileSize = res.data.result.file_size;
     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
-    const pathSaveFile=path.join(__dirname+"/static/img", `${fileId}.jpg`);
+    const pathSaveFile=path.join(__dirname+"/static/img", `${caption}.jpg`);
 
 
     const download = function(uri, filename, callback){
