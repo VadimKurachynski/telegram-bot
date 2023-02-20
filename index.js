@@ -1,12 +1,10 @@
 const express = require('express');
 require('dotenv').config();
-const { Telegraf } = require('telegraf');
-PORT=process.env.PORT;
+const {Telegraf} = require('telegraf');
+PORT = process.env.PORT;
 const app = express();
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
-
-
 
 
 bot.start(ctx => {
@@ -23,27 +21,28 @@ bot.on('text', ctx => {
 // })
 
 
-
-
-
 bot.launch()
-let textSend="Привет, я бот";
-let token=process.env.BOT_TOKEN;
-let chatId=process.env.CHAT_ID;
+let textSend = "Привет, я бот";
+let token = process.env.BOT_TOKEN;
+let chatId = process.env.CHAT_ID;
 
 
 app.get('/api/text', (req, res) => {
-    PostText(token,chatId,textSend);
+    PostText(token, chatId, textSend);
     // return res.status(200).json({Auth: 0})
 })
 
 
 bot.on('photo', async (msg) => {
-    const fileId = msg.update.message.photo[2].file_id;
+    console.log(msg)
+    const length = msg.update.message.photo.length;// кол-во вариантов картинок
+    const fileId = msg.update.message.photo[length - 1].file_id; //вариант с большим размером
+    const caption = msg.update.message.caption;// текст сообщения
+    console.log(caption)
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
-    const filePath=res.data.result.file_path;
+    const filePath = res.data.result.file_path;
     console.log(filePath);
 
 
@@ -56,10 +55,7 @@ bot.on('photo', async (msg) => {
 });
 
 
-
-
-
-async function PostText(token,chatId,textSend ) {
+async function PostText(token, chatId, textSend) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
             chat_id: chatId,
@@ -70,14 +66,6 @@ async function PostText(token,chatId,textSend ) {
         console.error(error);
     }
 }
-
-
-
-
-
-
-
-
 
 
 app.listen(PORT, () => console.log(`My server is running on port ${PORT}`))
