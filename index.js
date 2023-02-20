@@ -19,10 +19,6 @@ bot.on('text', ctx => {
     console.log(ctx.botInfo)
 })
 
-// bot.on('photo', ctx => {
-//     ctx.reply("photo")
-//     console.log(ctx.message)
-// })
 
 
 bot.launch()
