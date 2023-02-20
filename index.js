@@ -54,14 +54,14 @@ bot.on(['photo'], async (msg) => {
     const pathSaveFile=path.join(__dirname+"/imgmessage", `${fileId}.jpg`);
 
 
-    const download3 = function(uri, filename, callback){
+    const download = function(uri, filename, callback){
         request.head(uri, function(err, res, body){
             console.log('content-type:', res.headers['content-type']);
             console.log('content-length:', res.headers['content-length']);
             request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
         });
     };
-    download3(downloadURL, pathSaveFile, function(){
+    download(downloadURL, pathSaveFile, function(){
         console.log('done');
     });
 
