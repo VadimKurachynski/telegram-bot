@@ -1,6 +1,4 @@
 /.env
-.imap.js
-/imap.js
-/.imap.js
-/.imgmessage/
-/.imgmessage
+/static/img
+
+
