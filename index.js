@@ -2,19 +2,19 @@ const express = require('express');
 require('dotenv').config();
 const { Telegraf } = require('telegraf');
 PORT=process.env.PORT;
-const bodyParser = require('body-parser');
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(bodyParser.json());
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
+
+
+
 
 bot.start(ctx => {
     ctx.reply('Welcome, bro')
 })
 bot.on('text', ctx => {
     ctx.reply('just text')
+    console.log(ctx.botInfo)
 })
 
 // bot.on('photo', ctx => {
@@ -38,8 +38,8 @@ app.get('/api/text', (req, res) => {
 })
 
 
-bot.on('photo', async (doc) => {
-    const fileId = doc.update.message.photo[2].file_id;
+bot.on('photo', async (msg) => {
+    const fileId = msg.update.message.photo[2].file_id;
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
@@ -48,7 +48,7 @@ bot.on('photo', async (doc) => {
 
 
     const downloadURL =
-        `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${filePath}`;
+        `https://api.telegram.org/file/bot${token}/${filePath}`;
     console.log(downloadURL);
     // download(downloadURL, path.join(__dirname, `${fileId}.jpg`), () =>
     //     console.log('Done!')
