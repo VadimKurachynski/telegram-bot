@@ -43,9 +43,7 @@ bot.on(['photo'], async (msg) => {
     const dateMsg = new Date(msg.update.message.date * 1000).toLocaleString();//дата сообщения
     const idUser = msg.update.message.from.id;// id пользователя
     const nameUser = msg.update.message.from.first_name; // имя пользователя
-    const caption = msg.update.message.caption || `${fileId}`;//текст сообщения
-
-
+    const caption = msg.update.message.caption || "";//текст сообщения
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
@@ -54,7 +52,6 @@ bot.on(['photo'], async (msg) => {
     const fileUniqueId = res.data.result.file_unique_id + ".jpg";
     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
     const pathSaveFile = path.join(__dirname + "/static/img", `${fileUniqueId}`);
-
 
     const download = function (uri, filename, callback) {
         request.head(uri, function (err, res, body) {
@@ -77,8 +74,7 @@ bot.on(['photo'], async (msg) => {
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync('./static/json/info.json', data);
         //-------------------------------------------------
-        console.log(infoJson.files.photo);
-        console.log('done');
+         console.log (`done:///${fileUniqueId}`);
     });
 
 
