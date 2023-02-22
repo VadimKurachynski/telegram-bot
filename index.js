@@ -3,38 +3,38 @@ require('dotenv').config();
 const {Telegraf} = require('telegraf');
 PORT = process.env.PORT;
 const app = express();
-const download = require('download');
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
 const fs = require('fs');
 const path = require("path");
-const http = require('https');
 request = require('request');
-app.use(express.static(__dirname + "/static/img"));
-bot.start(ctx => {
-    ctx.reply('Welcome, bro')
-})
-bot.on('text', ctx => {
-    //ctx.reply('just text')
-    // console.log(ctx.botInfo)
-    // ctx.reply(infoJson);
-
-    //  console.log(infoJson.files.file.id)
-    //   ctx.reply(infoJson.age.toString());
-
-})
-
-
-bot.launch()
 let textSend = "Привет, я бот";
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
-
-
+bot.launch();
+app.use(express.static(__dirname + "/static/img"));
+app.use(express.static(__dirname + "/static/json"));
 app.get('/api/text', (req, res) => {
     PostText(token, chatId, textSend);
     // return res.status(200).json({Auth: 0})
 })
+
+bot.start(ctx => {
+    ctx.reply('Welcome, bro')
+})
+
+
+
+bot.on('text', ctx => {
+    let rawdata = fs.readFileSync('./static/json/info.json');
+    let infoJson = JSON.parse(rawdata);
+    let dataDelete=infoJson.files.photo.filter(item=>item.file_size !== "246566");
+    let data = JSON.stringify(dataDelete, null, 2);
+    fs.writeFileSync('./static/json/info.json', data);
+    ctx.reply('just text');
+})
+
+
 
 
 bot.on(['photo'], async (msg) => {
@@ -71,13 +71,16 @@ bot.on(['photo'], async (msg) => {
             "nameUser": nameUser,
             "caption": caption
         });
+
+
+
+
+
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync('./static/json/info.json', data);
         //-------------------------------------------------
          console.log (`done:///${fileUniqueId}`);
     });
-
-
 });
 
 
