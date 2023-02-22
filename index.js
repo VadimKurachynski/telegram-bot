@@ -36,8 +36,6 @@ app.get('/api/text', (req, res) => {
 bot.on(['photo'], async (msg) => {
     const length = msg.update.message.photo.length;//кол-во вариантов картинок
     const fileId = msg.update.message.photo[length - 1].file_id;//вариант с большим размером
-
-
     const dateMsg = new Date(msg.update.message.date * 1000).toLocaleString();//дата сообщения
     const idUser = msg.update.message.from.id;// id пользователя
     const nameUser = msg.update.message.from.first_name; // имя пользователя
@@ -48,9 +46,13 @@ bot.on(['photo'], async (msg) => {
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
     const filePath = res.data.result.file_path;
+    console.log("**********************")
+    console.log(res.data)
+    console.log("______________________")
     const fileSize = res.data.result.file_size;
+    const fileUniqueId=res.data.result.file_unique_id;
     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
-    const pathSaveFile=path.join(__dirname+"/static/img", `${caption}.jpg`);
+    const pathSaveFile=path.join(__dirname+"/static/img", `${fileUniqueId}.jpg`);
 
 
     const download = function(uri, filename, callback){
