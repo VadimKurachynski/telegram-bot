@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require("path");
 const http = require('https');
 request = require('request');
-
+app.use(express.static(__dirname + "/static/img"));
 bot.start(ctx => {
     ctx.reply('Welcome, bro')
 })
