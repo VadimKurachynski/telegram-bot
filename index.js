@@ -15,10 +15,14 @@ bot.start(ctx => {
     ctx.reply('Welcome, bro')
 })
 bot.on('text', ctx => {
-    ctx.reply('just text')
-    console.log(ctx.botInfo)
-})
+    //ctx.reply('just text')
+    // console.log(ctx.botInfo)
+    // ctx.reply(infoJson);
 
+    //  console.log(infoJson.files.file.id)
+    //   ctx.reply(infoJson.age.toString());
+
+})
 
 
 bot.launch()
@@ -39,58 +43,46 @@ bot.on(['photo'], async (msg) => {
     const dateMsg = new Date(msg.update.message.date * 1000).toLocaleString();//дата сообщения
     const idUser = msg.update.message.from.id;// id пользователя
     const nameUser = msg.update.message.from.first_name; // имя пользователя
-    const caption = msg.update.message.caption|| `${fileId}`;//текст сообщения
+    const caption = msg.update.message.caption || `${fileId}`;//текст сообщения
 
 
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
     const filePath = res.data.result.file_path;
-    console.log("**********************")
-    console.log(res.data)
-    console.log("______________________")
     const fileSize = res.data.result.file_size;
-    const fileUniqueId=res.data.result.file_unique_id;
+    const fileUniqueId = res.data.result.file_unique_id + ".jpg";
     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
-    const pathSaveFile=path.join(__dirname+"/static/img", `${fileUniqueId}.jpg`);
+    const pathSaveFile = path.join(__dirname + "/static/img", `${fileUniqueId}`);
 
 
-    const download = function(uri, filename, callback){
-        request.head(uri, function(err, res, body){
-            console.log('content-type:', res.headers['content-type']);
-            console.log('content-length:', res.headers['content-length']);
+    const download = function (uri, filename, callback) {
+        request.head(uri, function (err, res, body) {
             request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
         });
     };
-    download(downloadURL, pathSaveFile, function(){
+    download(downloadURL, pathSaveFile, function () {
+
+        //---------запись в файл info.json-----------------
+        let rawdata = fs.readFileSync('./static/json/info.json');
+        let infoJson = JSON.parse(rawdata);
+        infoJson.files.photo.push({
+            "id": fileUniqueId,
+            "data": dateMsg,
+            "file_size": fileSize,
+            "idUser": idUser,
+            "nameUser": nameUser,
+            "caption": caption
+        });
+        let data = JSON.stringify(infoJson, null, 2);
+        fs.writeFileSync('./static/json/info.json', data);
+        //-------------------------------------------------
+        console.log(infoJson.files.photo);
         console.log('done');
     });
 
 
-
-
-
-
-//await download2(downloadURL, path2);
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
-
-
-
-
-
 
 
 async function PostText(token, chatId, textSend) {
