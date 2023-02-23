@@ -27,11 +27,10 @@ bot.start(ctx => {
 bot.on('text', ctx => {
 
     //----удаление по фильтру------------------------------
-    let frontdata = fs.readFileSync('./static/json/front.json');
-    let frontJson = JSON.parse(frontdata);
-    let rawdata = fs.readFileSync('./static/json/info.json');
-    let infoJson = JSON.parse(rawdata);
-    infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.photo.includes(item.id));
+
+    let frontJson = JSON.parse(fs.readFileSync('./static/json/front.json'));
+    let infoJson = JSON.parse(fs.readFileSync('./static/json/info.json'));
+    infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.files.includes(item.id));
     infoJson.files.countPhoto = infoJson.files.photo.length;
     let data = JSON.stringify(infoJson, null, 2);
     fs.writeFileSync('./static/json/info.json', data);
