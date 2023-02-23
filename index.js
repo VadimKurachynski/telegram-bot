@@ -70,10 +70,7 @@ bot.on(['photo'], async (msg) => {
             "nameUser": nameUser,
             "caption": caption
         });
-
-
-
-
+        infoJson.files.countPhoto=infoJson.files.photo.length;
 
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync('./static/json/info.json', data);
