@@ -24,12 +24,15 @@ bot.start(ctx => {
 })
 
 
-
 bot.on('text', ctx => {
+
     //----удаление по фильтру------------------------------
+    let frontdata = fs.readFileSync('./static/json/front.json');
+    let frontJson = JSON.parse(frontdata);
     let rawdata = fs.readFileSync('./static/json/info.json');
     let infoJson = JSON.parse(rawdata);
-    infoJson.files.photo=infoJson.files.photo.filter(item => item.file_size !== "24656");
+    infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.photo.includes(item.id));
+    infoJson.files.countPhoto = infoJson.files.photo.length;
     let data = JSON.stringify(infoJson, null, 2);
     fs.writeFileSync('./static/json/info.json', data);
     ctx.reply('just text');
@@ -70,12 +73,12 @@ bot.on(['photo'], async (msg) => {
             "nameUser": nameUser,
             "caption": caption
         });
-        infoJson.files.countPhoto=infoJson.files.photo.length;
+        infoJson.files.countPhoto = infoJson.files.photo.length;
 
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync('./static/json/info.json', data);
         //-------------------------------------------------
-         console.log (`done:///${fileUniqueId}`);
+        console.log(`done:///${fileUniqueId}`);
     });
 });
 
