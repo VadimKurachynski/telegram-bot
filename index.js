@@ -25,9 +25,7 @@ bot.start(ctx => {
 
 
 bot.on('text', ctx => {
-
     //----удаление по фильтру------------------------------
-
     let frontJson = JSON.parse(fs.readFileSync('./static/json/front.json'));
     let infoJson = JSON.parse(fs.readFileSync('./static/json/info.json'));
     infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.files.includes(item.id));
