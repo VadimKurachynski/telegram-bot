@@ -36,7 +36,6 @@ bot.on('text', ctx => {
 
 
 
-
 bot.on(['photo'], async (msg) => {
     const length = msg.update.message.photo.length;//кол-во вариантов картинок
     const fileId = msg.update.message.photo[length - 1].file_id;//вариант с большим размером
