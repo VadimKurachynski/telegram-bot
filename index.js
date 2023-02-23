@@ -26,14 +26,14 @@ bot.start(ctx => {
 
 
 bot.on('text', ctx => {
+    //----удаление по фильтру------------------------------
     let rawdata = fs.readFileSync('./static/json/info.json');
     let infoJson = JSON.parse(rawdata);
-    let dataDelete=infoJson.files.photo.filter(item=>item.file_size !== "246566");
-    let data = JSON.stringify(dataDelete, null, 2);
+    infoJson.files.photo=infoJson.files.photo.filter(item => item.file_size !== "24656");
+    let data = JSON.stringify(infoJson, null, 2);
     fs.writeFileSync('./static/json/info.json', data);
     ctx.reply('just text');
 })
-
 
 
 bot.on(['photo'], async (msg) => {
