@@ -28,20 +28,22 @@ bot.on('text', ctx => {
     //----удаление по фильтру------------------------------
     let frontJson = JSON.parse(fs.readFileSync('./static/json/front.json'));
     let infoJson = JSON.parse(fs.readFileSync('./static/json/info.json'));
-
-
-    fs.unlink(`./static/files/${data.txt}`, (err) => {
-        if (err) throw err;
-        console.log('Deleted');
-    });
+    for (let item of frontJson.files) {
+        if (fs.existsSync(`./static/files/${item}`)) {
+            try {
+                fs.unlinkSync(`./static/files/${item}`);
+                console.log(`Deleted:${item}`);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
 
     infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.files.includes(item.id));
     infoJson.files.countPhoto = infoJson.files.photo.length;
+    infoJson.files.countAll = infoJson.files.countPhoto + infoJson.files.countVideo + infoJson.files.countFiles;
     let data = JSON.stringify(infoJson, null, 2);
     fs.writeFileSync('./static/json/info.json', data);
-
-
-
     ctx.reply('just text');
 })
 
@@ -68,7 +70,6 @@ bot.on(['photo'], async (msg) => {
         });
     };
     download(downloadURL, pathSaveFile, function () {
-
         //---------запись в файл info.json-----------------
         let rawdata = fs.readFileSync('./static/json/info.json');
         let infoJson = JSON.parse(rawdata);
@@ -81,13 +82,14 @@ bot.on(['photo'], async (msg) => {
             "caption": caption
         });
         infoJson.files.countPhoto = infoJson.files.photo.length;
-
+        infoJson.files.countAll = infoJson.files.countPhoto + infoJson.files.countVideo + infoJson.files.countFiles;
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync('./static/json/info.json', data);
         //-------------------------------------------------
         console.log(`done:///${fileUniqueId}`);
     });
 });
+
 
 async function PostText(token, chatId, textSend) {
     try {
@@ -100,4 +102,5 @@ async function PostText(token, chatId, textSend) {
         console.error(error);
     }
 }
+
 app.listen(PORT, () => console.log(`My server is running on port ${PORT}`))
