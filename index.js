@@ -1,19 +1,27 @@
 const express = require('express');
 require('dotenv').config();
+const https = require("https");
 const {Telegraf} = require('telegraf');
+const appController = require('./controllers/appController');
 PORT = process.env.PORT;
 const app = express();
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
 const fs = require('fs');
 const path = require("path");
-request = require('request');
 let textSend = "Привет, я бот";
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
 bot.launch();
 app.use(express.static(__dirname + "/static/files"));
-app.use(express.static(__dirname + "/static/json"));
+//app.use(express.static(__dirname + "/static/json"));
+const pathJsonFront=__dirname + "/static/json/front.json";
+const pathJsonInfo=__dirname + "/static/json/info.json";
+
+
+
+app.get("/api/files", appController.ApiFiles_get);//authentication
+
 app.get('/api/text', (req, res) => {
     PostText(token, chatId, textSend);
     // return res.status(200).json({Auth: 0})
@@ -26,53 +34,48 @@ bot.start(ctx => {
 
 bot.on('text', ctx => {
     //----удаление по фильтру------------------------------
-    let frontJson = JSON.parse(fs.readFileSync('./static/json/front.json'));
-    let infoJson = JSON.parse(fs.readFileSync('./static/json/info.json'));
+    let frontJson = JSON.parse(fs.readFileSync(pathJsonFront));
+    let infoJson = JSON.parse(fs.readFileSync(pathJsonInfo));
     for (let item of frontJson.files) {
-        if (fs.existsSync(`./static/files/${item}`)) {
+        if (fs.existsSync(__dirname+`/static/files/${item}`)) {
             try {
-                fs.unlinkSync(`./static/files/${item}`);
+                fs.unlinkSync(__dirname+`/static/files/${item}`);
                 console.log(`Deleted:${item}`);
             } catch (e) {
                 console.log(e);
             }
         }
     }
-
-    infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.files.includes(item.id));
-    infoJson.files.countPhoto = infoJson.files.photo.length;
-    infoJson.files.countAll = infoJson.files.countPhoto + infoJson.files.countVideo + infoJson.files.countFiles;
+    const pInf = infoJson.files;
+    pInf.photo = pInf.photo.filter(item => !frontJson.files.includes(item.id));
+    pInf.countPhoto = pInf.photo.length;
+    pInf.countAll = pInf.countPhoto + pInf.countVideo + pInf.countFiles;
     let data = JSON.stringify(infoJson, null, 2);
-    fs.writeFileSync('./static/json/info.json', data);
+    fs.writeFileSync(pathJsonInfo, data);
     ctx.reply('just text');
 })
 
 
 bot.on(['photo'], async (msg) => {
-    const length = msg.update.message.photo.length;//кол-во вариантов картинок
-    const fileId = msg.update.message.photo[length - 1].file_id;//вариант с большим размером
-    const dateMsg = new Date(msg.update.message.date * 1000).toLocaleString();//дата сообщения
-    const idUser = msg.update.message.from.id;// id пользователя
-    const nameUser = msg.update.message.from.first_name; // имя пользователя
-    const caption = msg.update.message.caption || "";//текст сообщения
+    const pMsg = msg.update.message;
+    const length = pMsg.photo.length;//кол-во вариантов картинок
+    const fileId = pMsg.photo[length - 1].file_id;//вариант с большим размером
+    const dateMsg = new Date(pMsg.date * 1000).toLocaleString();//дата сообщения
+    const idUser = pMsg.from.id;// id пользователя
+    const nameUser = pMsg.from.first_name; // имя пользователя
+    const caption = pMsg.caption || "";//текст сообщения
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
-    const filePath = res.data.result.file_path;
-    const fileSize = res.data.result.file_size;
-    const fileUniqueId = res.data.result.file_unique_id + ".jpg";
+    const rMsg = res.data.result;
+    const filePath = rMsg.file_path;
+    const fileSize = rMsg.file_size;
+    const fileUniqueId = rMsg.file_unique_id + ".jpg";
     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
     const pathSaveFile = path.join(__dirname + "/static/files", `${fileUniqueId}`);
-
-    const download = function (uri, filename, callback) {
-        request.head(uri, function (err, res, body) {
-            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-        });
-    };
-    download(downloadURL, pathSaveFile, function () {
-        //---------запись в файл info.json-----------------
-        let rawdata = fs.readFileSync('./static/json/info.json');
-        let infoJson = JSON.parse(rawdata);
+    downloadFile(downloadURL,pathSaveFile,function (){
+        let rawData = fs.readFileSync(pathJsonInfo);
+        let infoJson = JSON.parse(rawData);
         infoJson.files.photo.push({
             "id": fileUniqueId,
             "data": dateMsg,
@@ -81,16 +84,37 @@ bot.on(['photo'], async (msg) => {
             "nameUser": nameUser,
             "caption": caption
         });
-        infoJson.files.countPhoto = infoJson.files.photo.length;
-        infoJson.files.countAll = infoJson.files.countPhoto + infoJson.files.countVideo + infoJson.files.countFiles;
+        const imf = infoJson.files;
+        imf.countPhoto = imf.photo.length;
+        imf.countAll = imf.countPhoto + imf.countVideo + imf.countFiles;
         let data = JSON.stringify(infoJson, null, 2);
-        fs.writeFileSync('./static/json/info.json', data);
+        fs.writeFileSync(pathJsonInfo, data);
         //-------------------------------------------------
         console.log(`done:///${fileUniqueId}`);
     });
 });
 
+function downloadFile(url,filename,callback){
+    const req = https.get(url, function (res) {
+        const fileStream = fs.createWriteStream(filename)
+        res.pipe(fileStream);
+        fileStream.on("error", function (err) {
+            console.log("Ошибка записи");
+            console.log(err);
+        });
+        fileStream.on("close", function () {
+           fileStream.close(callback);
+        });
 
+        fileStream.on("finish", function () {
+        });
+    });
+    req.on("error", function (err) {
+        console.log("Ошибка загрузки");
+        console.log(err);
+    })
+
+}
 async function PostText(token, chatId, textSend) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
