@@ -12,7 +12,7 @@ let textSend = "Привет, я бот";
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
 bot.launch();
-app.use(express.static(__dirname + "/static/img"));
+app.use(express.static(__dirname + "/static/files"));
 app.use(express.static(__dirname + "/static/json"));
 app.get('/api/text', (req, res) => {
     PostText(token, chatId, textSend);
@@ -28,10 +28,20 @@ bot.on('text', ctx => {
     //----удаление по фильтру------------------------------
     let frontJson = JSON.parse(fs.readFileSync('./static/json/front.json'));
     let infoJson = JSON.parse(fs.readFileSync('./static/json/info.json'));
+
+
+    fs.unlink(`./static/files/${data.txt}`, (err) => {
+        if (err) throw err;
+        console.log('Deleted');
+    });
+
     infoJson.files.photo = infoJson.files.photo.filter(item => !frontJson.files.includes(item.id));
     infoJson.files.countPhoto = infoJson.files.photo.length;
     let data = JSON.stringify(infoJson, null, 2);
     fs.writeFileSync('./static/json/info.json', data);
+
+
+
     ctx.reply('just text');
 })
 
@@ -50,7 +60,7 @@ bot.on(['photo'], async (msg) => {
     const fileSize = res.data.result.file_size;
     const fileUniqueId = res.data.result.file_unique_id + ".jpg";
     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
-    const pathSaveFile = path.join(__dirname + "/static/img", `${fileUniqueId}`);
+    const pathSaveFile = path.join(__dirname + "/static/files", `${fileUniqueId}`);
 
     const download = function (uri, filename, callback) {
         request.head(uri, function (err, res, body) {
@@ -79,7 +89,6 @@ bot.on(['photo'], async (msg) => {
     });
 });
 
-
 async function PostText(token, chatId, textSend) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -91,6 +100,4 @@ async function PostText(token, chatId, textSend) {
         console.error(error);
     }
 }
-
-
 app.listen(PORT, () => console.log(`My server is running on port ${PORT}`))
