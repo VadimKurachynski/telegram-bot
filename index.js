@@ -20,7 +20,7 @@ const pathJsonInfo=__dirname + "/static/json/info.json";
 
 
 
-app.get("/api/files", appController.ApiFiles_get);//authentication
+app.get("/api2/files", appController.ApiFiles_get);//authentication
 
 app.get('/api/text', (req, res) => {
     PostText(token, chatId, textSend);
@@ -54,8 +54,6 @@ bot.on('text', ctx => {
     fs.writeFileSync(pathJsonInfo, data);
     ctx.reply('just text');
 })
-
-
 bot.on(['photo'], async (msg) => {
     const pMsg = msg.update.message;
     const length = pMsg.photo.length;//кол-во вариантов картинок
@@ -93,6 +91,16 @@ bot.on(['photo'], async (msg) => {
         console.log(`done:///${fileUniqueId}`);
     });
 });
+
+
+bot.on(['video'], async (msg) => {
+    msg.reply('video')
+
+});
+
+
+
+
 
 function downloadFile(url,filename,callback){
     const req = https.get(url, function (res) {

@@ -6,5 +6,5 @@ exports.ApiFiles_get = (req, res) => {
    (req.query.name==="comp") ? res.status(200).json(infoJson) : res.status(200).json({Auth: 0});
 }
 
-//http://localhost:3002/api/files?name=comp
+//http://localhost:3002/api2/files?name=comp
 
