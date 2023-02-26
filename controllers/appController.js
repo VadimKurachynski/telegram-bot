@@ -1,8 +1,13 @@
 const fs = require("fs");
+const gsu = require("../textmessage/dataGhu");
+const {Telegraf} = require("telegraf");
+const axios = require("axios");
 const pathJsonInfo = "./static/json/info.json";
 const dir = "./static/files/";
 let infoJson = JSON.parse(fs.readFileSync(pathJsonInfo));
-
+const bot = new Telegraf(process.env.BOT_TOKEN);
+let token = process.env.BOT_TOKEN;
+let chatId = process.env.CHAT_ID;
 exports.ApiFiles_get = (req, res) => {
     let infoJson = JSON.parse(fs.readFileSync(pathJsonInfo));
     (req.query.name === "comp") ? res.status(200).json(infoJson) : res.status(200).json({Auth: 0});
@@ -26,10 +31,21 @@ exports.ApiFilesDelete_get = (req, res) => {
         res.status(200).json({status: "nodelete"});
     }
 };
+exports.ApiMessage_post = (req, res) => {
+PostText(token,chatId,gsu.sutochnye("345","678"));
+    res.status(200).json({status: "ок"});
+}
 
 
-//  (req.session.isAuth) ? res.status(200).json({Auth: 1}) : res.status(200).json({Auth: 0});
 
-
-//http://localhost:3002/api2/files?name=comp
-//http://localhost:3002/api2/allfilesdelete?name=comp
+async function PostText(token, chatId, textSend) {
+    try {
+        await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+            chat_id: chatId,
+            text: textSend ,
+            parse_mode: 'HTML'
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}

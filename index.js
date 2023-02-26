@@ -10,28 +10,34 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 const fs = require('fs');
 const path = require("path");
 const FileSizeNorm = 15000000;
-const pathJsonFront = __dirname + "/static/json/front.json";
-const pathJsonInfo = __dirname + "/static/json/info.json";
-let textSend = "Привет, я бот";
+const pathJsonInfo ="./static/json/info.json";
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
 bot.launch();
 app.use(express.static(__dirname + "/static/files"));
-
+const gsu = require('./textmessage/dataGhu');
 //-----------------------
 app.get("/api2/files", appController.ApiFiles_get);
 app.get("/api2/allfilesdelete", appController.ApiFilesDelete_get);
+app.get("/api2/message", appController.ApiMessage_post);
 //----------------------
 
 
 bot.start(ctx => {
-    ctx.reply('Welcome, bro')
+    ctx.reply("Добро пожаловать в чат-бот Пружанской ТЭЦ!"
+    )
 })
 
 
 bot.on('text', ctx => {
-
+    ctx.replyWithHTML(
+        gsu.sutochnye("345","678")
+    )
 })
+
+
+
+
 
 
 bot.on(['photo', 'document', 'video'], async (msg) => {
@@ -120,16 +126,6 @@ function downloadFile(url, filename, callback) {
 
 }
 
-async function PostText(token, chatId, textSend) {
-    try {
-        await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-            chat_id: chatId,
-            text: '<b>TEST</b> <a href="https://www.youtube.com/watch?v=CsRqP3xlE8E">inline URL</a>',
-            parse_mode: 'HTML'
-        });
-    } catch (error) {
-        console.error(error);
-    }
-}
+
 
 app.listen(PORT, () => console.log(`My server is running on port ${PORT}`))
