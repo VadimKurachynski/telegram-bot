@@ -54,24 +54,32 @@ bot.on('text', ctx => {
     fs.writeFileSync(pathJsonInfo, data);
     ctx.reply('just text');
 })
-bot.on(['photo'], async (msg) => {
-    console.log(msg)
+
+
+bot.on(['photo','document','video'], async (msg) => {
+    let pi="";
+    let fileId="";
+    if(msg.update.message.photo){ pi='photo' }
+    if(msg.update.message.document){pi='document'}
+    if(msg.update.message.video){pi='video'}
     const pMsg = msg.update.message;
-    const length = pMsg.photo.length;//кол-во вариантов картинок
-    const fileId = pMsg.photo[length - 1].file_id;//вариант с большим размером
     const dateMsg = new Date(pMsg.date * 1000).toLocaleString();//дата сообщения
     const idUser = pMsg.from.id;// id пользователя
     const nameUser = pMsg.from.first_name; // имя пользователя
     const caption = pMsg.caption || "";//текст сообщения
-    const res = await axios.get(
-        `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
-    );
-    const rMsg = res.data.result;
-    const filePath = rMsg.file_path;
-    const fileSize = rMsg.file_size;
-    const fileUniqueId = rMsg.file_unique_id + ".jpg";
-    const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
-    const pathSaveFile = path.join(__dirname + "/static/files", `${fileUniqueId}`);
+    if(pi==='photo') {fileId = pMsg.photo[pMsg.photo.length - 1].file_id}//вариант с большим размером
+    if(pi==='video'){fileId=pMsg.video.file_id};
+    if(pi==='document'){fileId=pMsg.document.file_id};
+     const res = await axios.get(
+         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
+     );
+     const rMsg = res.data.result;
+     const filePath = rMsg.file_path;
+     const fileSize = rMsg.file_size;
+     const fileType = rMsg.file_path.split('.').reverse()[0];
+     const fileUniqueId = rMsg.file_unique_id + "."+fileType;
+     const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
+     const pathSaveFile = path.join(__dirname + "/static/files", `${fileUniqueId}`);
     downloadFile(downloadURL,pathSaveFile,function (){
         let rawData = fs.readFileSync(pathJsonInfo);
         let infoJson = JSON.parse(rawData);
@@ -94,15 +102,16 @@ bot.on(['photo'], async (msg) => {
 });
 
 
-bot.on(['video'], async (msg) => {
-    console.log(msg.update.message.video)
-    msg.reply('video');
-});
 
-bot.on(['document'], async (msg) => {
-    console.log(msg.update.message.document)
-    msg.reply('files');
-});
+// bot.on(['video'], async (msg) => {
+//     console.log(msg.update.message.video)
+//     msg.reply('video');
+// });
+//
+// bot.on(['document'], async (msg) => {
+//     console.log(msg.update.message.document)
+//     msg.reply('files');
+// });
 
 
 
