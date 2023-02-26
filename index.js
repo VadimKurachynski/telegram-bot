@@ -55,6 +55,7 @@ bot.on('text', ctx => {
     ctx.reply('just text');
 })
 bot.on(['photo'], async (msg) => {
+    console.log(msg)
     const pMsg = msg.update.message;
     const length = pMsg.photo.length;//кол-во вариантов картинок
     const fileId = pMsg.photo[length - 1].file_id;//вариант с большим размером
@@ -94,8 +95,13 @@ bot.on(['photo'], async (msg) => {
 
 
 bot.on(['video'], async (msg) => {
-    msg.reply('video')
+    console.log(msg.update.message.video)
+    msg.reply('video');
+});
 
+bot.on(['document'], async (msg) => {
+    console.log(msg.update.message.document)
+    msg.reply('files');
 });
 
 
