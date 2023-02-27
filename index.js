@@ -5,12 +5,14 @@ const https = require("https");
 const {Telegraf} = require('telegraf');
 const appController = require('./controllers/appController');
 const app = express();
+const jsonParser = express.json();
 const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
 const fs = require('fs');
 const path = require("path");
 const FileSizeNorm = 15000000;
 const pathJsonInfo ="./static/json/info.json";
+const urlencodedParser = express.urlencoded({extended: false});
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
 bot.launch();
@@ -19,7 +21,7 @@ const gsu = require('./textmessage/dataGhu');
 //-----------------------
 app.get("/api2/files", appController.ApiFiles_get);
 app.get("/api2/allfilesdelete", appController.ApiFilesDelete_get);
-app.get("/api2/message", appController.ApiMessage_post);
+app.post("/api2/message",jsonParser, appController.ApiMessage_post);
 //----------------------
 
 

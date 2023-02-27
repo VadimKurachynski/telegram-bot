@@ -1,38 +1,57 @@
 
 
-exports.sutochnye=(x1,x2)=>{
+exports.sutochnye=(body)=>{
+    const{date,gas,shepaPrihod,shepaRashod,shepaOstatok,
+        torfPrihod,torfRashod,torfOstatok,
+        vyrabotka,sobstvennye,proizvodstvennye,otpuskvSet,
+        Tnaruzn,Tprimoj,Tobratnoj,TprimNaGorod,Vpashod,
+        Pkotla,Gpodpitka,NCC}=body.message;
+    const srrashod=(+Vpashod/24).toFixed(0);
+    const srpkotla=(+Pkotla/24).toFixed(1);
+
     return `
-<b>Добро пожаловать в чат-бот Пружанской ТЭЦ</b>
-    <pre>
-     СООБЩЕНИЕ ОТ ГЩУ
-    Дата:  25.02.2023 
-    Газ_м³:            ${x1}
-    Щепа_приход_т:     ${x2}
-    Щепа_расход_т:     195
-    Щепа_остаток_т:    607
-    *****************************
-    Торф_приход_т:     0
-    Торф_расход_т:     0
-    Торф_остаток_т:    0
-    *****************************
-    Выработка_кВтч:    82128
-    СН_кВтч:           13716
-    Пр_н_кВтч:         203
-    Отпуск_кВтч:       68209
-    *****************************
-    Тнар_возд_°C:      2,1
-    Тпрям_°C:          60,5
-    Тобратн_°C:        49,4
-    Тпрям_на_город_°C: 60,6
-    Vрасход_м³/сут:    21514(897)
-    ****************************
-    Pкотла_МВт:        406,8(17)
-    Gподп_ТС_м³/сут:   25
-    НСС: Богдан
+<b>СООБЩЕНИЕ ОТ ГЩУ</b>
+Данные за:  ${date}
+<pre>
+Газ_м³:            ${gas}
+Щепа_приход_т:     ${shepaPrihod}
+Щепа_расход_т:     ${shepaRashod}
+Щепа_остаток_т:    ${shepaOstatok}
+*************************
+Торф_приход_т:     ${torfPrihod}
+Торф_расход_т:     ${torfRashod}
+Торф_остаток_т:    ${torfOstatok}
+*************************
+Выработка_кВтч:    ${vyrabotka}
+СН_кВтч:           ${sobstvennye}
+Пр_н_кВтч:         ${proizvodstvennye}
+Отпуск_кВтч:       ${otpuskvSet}
+*************************
+Тнар_возд_°C:      ${Tnaruzn}
+Тпрям_°C:          ${Tprimoj}
+Тобратн_°C:        ${Tobratnoj}
+Тпрям_на_город_°C: ${TprimNaGorod}
+Vрасход_м³/сут:    ${Vpashod}(${srrashod})
+*************************
+Pкотла_МВт:        ${Pkotla}(${srpkotla})
+Gподп_ТС_м³/сут:   ${Gpodpitka}
+НСС: ${NCC}
 </pre>
-    Доброго дня и хорошего настроения! (smiley)
-        `;
-}
+<b>Доброго дня и хорошего настроения!</b>
+`
+};
 
 
+
+exports.prostomessage=(body)=>{
+  //  console.log("******************************************")
+    const{text,NCC}=body.message;
+
+    return `
+<b>СООБЩЕНИЕ ОТ ГЩУ</b>
+${text}
+
+<b>Доброго дня и хорошего настроения!</b>
+`
+};
 

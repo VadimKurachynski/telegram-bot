@@ -32,7 +32,15 @@ exports.ApiFilesDelete_get = (req, res) => {
     }
 };
 exports.ApiMessage_post = (req, res) => {
-PostText(token,chatId,gsu.sutochnye("345","678"));
+    if(req.body.typemessage==="sutochnye"){
+        PostText(token,chatId,gsu.sutochnye(req.body));
+    }
+
+    if(req.body.typemessage==="prostomessage"){
+        PostText(token,chatId,gsu.prostomessage(req.body));
+    }
+
+
     res.status(200).json({status: "ок"});
 }
 
