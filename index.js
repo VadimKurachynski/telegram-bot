@@ -23,8 +23,6 @@ app.get("/api2/files", appController.ApiFiles_get);
 app.get("/api2/allfilesdelete", appController.ApiFilesDelete_get);
 app.post("/api2/message",jsonParser, appController.ApiMessage_post);
 //----------------------
-
-
 bot.start(ctx => {
     ctx.reply("Добро пожаловать в чат-бот Пружанской ТЭЦ!"
     )

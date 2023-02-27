@@ -49,6 +49,7 @@ exports.prostomessage=(body)=>{
 
     return `
 <b>СООБЩЕНИЕ ОТ ГЩУ</b>
+
 ${text}
 
 <b>Доброго дня и хорошего настроения!</b>
