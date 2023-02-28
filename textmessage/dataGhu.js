@@ -41,8 +41,6 @@ Gподп_ТС_м³/сут:   ${Gpodpitka}
 `
 };
 
-
-
 exports.prostomessage=(body)=>{
   //  console.log("******************************************")
     const{text,NCC}=body.message;
