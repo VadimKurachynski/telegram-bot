@@ -45,8 +45,6 @@ console.log(req.body);
     res.status(200).json({status: "ок"});
 }
 
-
-
 async function PostText(token, chatId, textSend) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
