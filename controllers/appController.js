@@ -41,7 +41,6 @@ console.log(req.body);
         PostText(token,chatId,gsu.prostomessage(req.body));
     }
 
-
     res.status(200).json({status: "ок"});
 }
 
