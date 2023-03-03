@@ -1,3 +1,4 @@
+const axios = require('axios');
 const express = require('express');
 require('dotenv').config();
 PORT = process.env.PORT;
@@ -6,16 +7,14 @@ const {Telegraf} = require('telegraf');
 const appController = require('./controllers/appController');
 const app = express();
 const jsonParser = express.json();
-const axios = require('axios');
 const bot = new Telegraf(process.env.BOT_TOKEN)
 const fs = require('fs');
 const path = require("path");
 const FileSizeNorm = 15000000;
-app.use( '/memo',express.static("./static/files"));
+app.use( 'api2/memo',express.static("./static/files"));
 const pathJsonInfo ="./static/json/info.json";
 let token = process.env.BOT_TOKEN;
-bot.launch(
-
+bot.launch();
 
 //-----------------------
 app.get("/api2/files", appController.ApiFiles_get);
