@@ -14,7 +14,7 @@ const FileSizeNorm = 15000000;
 const pathJsonInfo ="./static/json/info.json";
 let token = process.env.BOT_TOKEN;
 bot.launch();
-app.use(express.static(__dirname + "/static/files"));
+app.use(express.static("./static/files"));
 //-----------------------
 app.get("/api2/files", appController.ApiFiles_get);
 app.get("/api2/allfilesdelete", appController.ApiFilesDelete_get);
