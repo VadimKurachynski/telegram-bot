@@ -11,7 +11,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 const fs = require('fs');
 const path = require("path");
 const FileSizeNorm = 15000000;
-app.use( '/memo',express.static(path.join(__dirname + "/static/files")));
+app.use( './memo',express.static("./static/files"));
 const pathJsonInfo ="./static/json/info.json";
 let token = process.env.BOT_TOKEN;
 bot.launch();
