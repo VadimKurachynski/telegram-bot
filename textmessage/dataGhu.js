@@ -42,13 +42,9 @@ Gподп_ТС_м³/сут:   ${Gpodpitka}
 };
 
 exports.prostomessage=(body)=>{
-    const{text,NCC}=body.message;
+    const{text}=body.message;
 
     return `
-<b>🔥СООБЩЕНИЕ ОТ ГЩУ🔥</b>
-
 ${text}
-
-<b>Доброго дня и хорошего настроения!😃</b>
 `
 };
