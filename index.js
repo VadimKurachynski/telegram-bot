@@ -47,12 +47,10 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
     }//вариант с большим размером
     if (pi === 'video') {
         fileId = pMsg.video.file_id
-    }
-    ;
+    };
     if (pi === 'document') {
         fileId = pMsg.document.file_id
-    }
-    ;
+    };
     const res = await axios.get(
         `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
     );
@@ -62,7 +60,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         msg.reply(`файл слишком большой для загрузки
      (больше ${+FileSizeNorm / 1000000} Мбайт)`);
         return;
-    }
+    };
     const filePath = rMsg.file_path;
     const fileType = rMsg.file_path.split('.').reverse()[0];
     const fileUniqueId = rMsg.file_unique_id + "." + fileType;

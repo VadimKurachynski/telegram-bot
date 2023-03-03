@@ -1,11 +1,9 @@
 const fs = require("fs");
 const gsu = require("../textmessage/dataGhu");
-const {Telegraf} = require("telegraf");
 const axios = require("axios");
 const pathJsonInfo = "./static/json/info.json";
 const dir = "./static/files/";
 let infoJson = JSON.parse(fs.readFileSync(pathJsonInfo));
-const bot = new Telegraf(process.env.BOT_TOKEN);
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
 exports.ApiFiles_get = (req, res) => {
