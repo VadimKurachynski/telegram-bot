@@ -1,5 +1,3 @@
-
-
 exports.sutochnye=(body)=>{
     const{date,gas,shepaPrihod,shepaRashod,shepaOstatok,
         torfPrihod,torfRashod,torfOstatok,

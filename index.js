@@ -26,7 +26,6 @@ bot.start(ctx => {
     )
 })
 
-
 bot.on(['photo', 'document', 'video'], async (msg) => {
     let pi = "";
     let fileId = "";
