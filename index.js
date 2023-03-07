@@ -3,7 +3,8 @@ const express = require('express');
 require('dotenv').config();
 PORT = process.env.PORT;
 const https = require("https");
-const {Telegraf} = require('telegraf');
+const {Telegraf, Markup} = require('telegraf');
+const { Keyboard } = require('telegram-keyboard')
 const appController = require('./controllers/appController');
 const app = express();
 const jsonParser = express.json();
@@ -14,7 +15,7 @@ const FileSizeNorm = 15000000;
 app.use('/api2/memo',express.static("./static/files"));
 const pathJsonInfo ="./static/json/info.json";
 let token = process.env.BOT_TOKEN;
-bot.launch();
+
 
 //-----------------------
 app.get("/api2/files", appController.ApiFiles_get);
@@ -22,10 +23,23 @@ app.get("/api2/allfilesdelete", appController.ApiFilesDelete_get);
 app.post("/api2/message",jsonParser, appController.ApiMessage_post);
 //----------------------
 bot.start(ctx => {
-    ctx.reply("Добро пожаловать в чат-бот Пружанской ТЭЦ!"
-    )
+    const keyboard = Keyboard.make([
+        ['/инструкция/'] // First row
+    ])
+    ctx.reply('Добро пожаловать в чат-бот Пружанской ТЭЦ!', keyboard.reply())
 })
 
+
+
+// bot.on('text', async (ctx) => {
+//     const keyboard = Keyboard.make([
+//         ['Button 1', 'Button 2'] // First row
+//     ])
+//     await ctx.reply('Simple built-in keyboard', keyboard.reply())
+// })
+
+
+bot.launch();
 bot.on(['photo', 'document', 'video'], async (msg) => {
     let pi = "";
     let fileId = "";
@@ -83,6 +97,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync(pathJsonInfo, data);
         //-------------------------------------------------
+        msg.reply(`файл загружен!`);
         console.log(`done:///${fileUniqueId}`);
     });
 });
