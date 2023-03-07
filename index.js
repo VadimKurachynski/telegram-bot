@@ -97,7 +97,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync(pathJsonInfo, data);
         //-------------------------------------------------
-        msg.reply(`файл загружен!`);
+        msg.reply(`Загружено! Ваше сообщение будет доставлено на ГЩУ. Спасибо!`);
         console.log(`done:///${fileUniqueId}`);
     });
 });
