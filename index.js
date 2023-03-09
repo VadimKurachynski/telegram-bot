@@ -3,7 +3,7 @@ const express = require('express');
 require('dotenv').config();
 PORT = process.env.PORT;
 const https = require("https");
-const {Telegraf, Markup} = require('telegraf');
+const {Telegraf} = require('telegraf');
 const { Keyboard } = require('telegram-keyboard')
 const appController = require('./controllers/appController');
 const app = express();
@@ -24,22 +24,39 @@ app.post("/api2/message",jsonParser, appController.ApiMessage_post);
 //----------------------
 bot.start(ctx => {
     const keyboard = Keyboard.make([
-        ['/инструкция/'] // First row
+        ['ИНСТРУКЦИЯ'] // First row
     ])
     ctx.reply('Добро пожаловать в чат-бот Пружанской ТЭЦ!', keyboard.reply())
 })
 
+bot.hears('ИНСТРУКЦИЯ', (ctx) => ctx.reply('Hey there'));
+bot.hears('С', ctx => {
+    ctx.replyWithPhoto(
+        'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
+        {
+            caption: 'Не вздумай сдаваться!'
+        }
+    )
+    ctx.replyWithPhoto(
+        'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
+        {
+            caption: 'Не вздумай сдаваться!'
+        }
+    )
 
+})
 
-// bot.on('text', async (ctx) => {
-//     const keyboard = Keyboard.make([
-//         ['Button 1', 'Button 2'] // First row
-//     ])
-//     await ctx.reply('Simple built-in keyboard', keyboard.reply())
-// })
+bot.on('text', async (ctx) => {
+    const keyboard = Keyboard.make([
+        ['ИНСТРУКЦИЯ'] // First row
+    ])
+    await ctx.reply('Simple built-in keyboard', keyboard.reply())
+    //await ctx.replyWithPhoto(Input.fromURL('https://picsum.photos/200/300/'));
+})
 
 
 bot.launch();
+
 bot.on(['photo', 'document', 'video'], async (msg) => {
     let pi = "";
     let fileId = "";
@@ -97,7 +114,8 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync(pathJsonInfo, data);
         //-------------------------------------------------
-        msg.reply(`Загружено! Ваше сообщение будет доставлено на ГЩУ. Спасибо!`);
+        if (caption===""){ msg.reply(`Загружено и будет доставлено на ГЩУ. Спасибо!`);}
+        if (caption!==""){ msg.reply(`Спасибо за Ваше сообщение! !`);}
         console.log(`done:///${fileUniqueId}`);
     });
 });
