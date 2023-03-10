@@ -120,7 +120,6 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
     });
 });
 
-
 function downloadFile(url, filename, callback) {
     const req = https.get(url, function (res) {
         const fileStream = fs.createWriteStream(filename)
