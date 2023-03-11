@@ -116,7 +116,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         //-------------------------------------------------
         if (caption===""||pi === 'document') { msg.reply(`Загружено и будет доставлено на ГЩУ. Спасибо!`);}
         if ((caption!=="")&&(pi === 'photo' || pi === 'video')){ msg.reply(`Спасибо за Ваше сообщение!`);}
-        console.log(`done:///${fileUniqueId}`);
+        //console.log(`done:///${fileUniqueId}`);
     });
 });
 
