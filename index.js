@@ -29,7 +29,7 @@ bot.start(ctx => {
     ctx.reply('Добро пожаловать в чат-бот Пружанской ТЭЦ!', keyboard.reply())
 })
 
-bot.hears('ИНСТРУКЦИЯ', (ctx) => ctx.reply('Hey there'));
+bot.hears('ИНСТРУКЦИЯ', (ctx) => ctx.reply('ИНструкцияВОТ'));
 bot.hears('С', ctx => {
     ctx.replyWithPhoto(
         'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
@@ -50,7 +50,7 @@ bot.on('text', async (ctx) => {
     const keyboard = Keyboard.make([
         ['ИНСТРУКЦИЯ'] // First row
     ])
-    await ctx.reply('Simple built-in keyboard', keyboard.reply())
+    await ctx.reply('отправьте', keyboard.reply())
     //await ctx.replyWithPhoto(Input.fromURL('https://picsum.photos/200/300/'));
 })
 
@@ -115,7 +115,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         fs.writeFileSync(pathJsonInfo, data);
         //-------------------------------------------------
         if (caption===""||pi === 'document') { msg.reply(`Загружено и будет доставлено на ГЩУ. Спасибо!`);}
-        if ((caption!=="")&&(pi === 'photo' || pi === 'video')){ msg.reply(`Спасибо за Ваше сообщение! !`);}
+        if ((caption!=="")&&(pi === 'photo' || pi === 'video')){ msg.reply(`Спасибо за Ваше сообщение!`);}
         console.log(`done:///${fileUniqueId}`);
     });
 });
