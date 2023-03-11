@@ -114,7 +114,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         let data = JSON.stringify(infoJson, null, 2);
         fs.writeFileSync(pathJsonInfo, data);
         //-------------------------------------------------
-        if (caption==="") { msg.reply(`Загружено и будет доставлено на ГЩУ. Спасибо!`);}
+        if (caption===""||pi === 'document') { msg.reply(`Загружено и будет доставлено на ГЩУ. Спасибо!`);}
         if ((caption!=="")&&(pi === 'photo' || pi === 'video')){ msg.reply(`Спасибо за Ваше сообщение! !`);}
         console.log(`done:///${fileUniqueId}`);
     });
