@@ -26,32 +26,27 @@ bot.start(ctx => {
     const keyboard = Keyboard.make([
         ['ИНСТРУКЦИЯ'] // First row
     ])
-    ctx.reply('Добро пожаловать в чат-бот Пружанской ТЭЦ!', keyboard.reply())
+    ctx.reply('Добро пожаловать в бот Пружанской ТЭЦ!',keyboard.reply())
 })
 
-bot.hears('ИНСТРУКЦИЯ', (ctx) => ctx.reply('ИНструкцияВОТ'));
-bot.hears('С', ctx => {
+bot.hears('ИНСТРУКЦИЯ', ctx => {
     ctx.replyWithPhoto(
         'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
         {
-            caption: 'Не вздумай сдаваться!'
+            caption: '1'
         }
     )
     ctx.replyWithPhoto(
         'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
         {
-            caption: 'Не вздумай сдаваться!'
+            caption: '2'
         }
     )
 
 })
 
 bot.on('text', async (ctx) => {
-    const keyboard = Keyboard.make([
-        ['ИНСТРУКЦИЯ'] // First row
-    ])
-    await ctx.reply('отправьте', keyboard.reply())
-    //await ctx.replyWithPhoto(Input.fromURL('https://picsum.photos/200/300/'));
+    ctx.reply('Извините, я пока не ChatGPT')
 })
 
 
@@ -116,7 +111,6 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         //-------------------------------------------------
         if (caption===""||pi === 'document') { msg.reply(`Загружено и будет доставлено на ГЩУ. Спасибо!`);}
         if ((caption!=="")&&(pi === 'photo' || pi === 'video')){ msg.reply(`Спасибо за Ваше сообщение!`);}
-        //console.log(`done:///${fileUniqueId}`);
     });
 });
 
