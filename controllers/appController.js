@@ -1,11 +1,11 @@
 const fs = require("fs");
-const gsu = require("../textmessage/dataGhu");
 const axios = require("axios");
 const pathJsonInfo = "./static/json/info.json";
 const dir = "./static/files/";
 let infoJson = JSON.parse(fs.readFileSync(pathJsonInfo));
 let token = process.env.BOT_TOKEN;
 let chatId = process.env.CHAT_ID;
+
 exports.ApiFiles_get = (req, res) => {
     let infoJson = JSON.parse(fs.readFileSync(pathJsonInfo));
     (req.query.name === "comp") ? res.status(200).json(infoJson) : res.status(200).json({Auth: 0});
@@ -40,7 +40,6 @@ exports.ApiMessage_post = (req, res) => {
         res.status(200).json({status: "ок"});
     }catch{ console.error("error")}
 }
-
 async function PostText(token, chatId, textSend) {
     try {
         await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
