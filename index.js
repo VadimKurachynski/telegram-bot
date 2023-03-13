@@ -61,7 +61,6 @@ bot.on('text', async (ctx) => {
     ctx.reply('Извините, я пока не ChatGPT')
 })
 
-
 bot.launch();
 
 bot.on(['photo', 'document', 'video'], async (msg) => {
