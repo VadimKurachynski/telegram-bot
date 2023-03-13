@@ -31,15 +31,27 @@ bot.start(ctx => {
 
 bot.hears('ИНСТРУКЦИЯ', ctx => {
     ctx.replyWithPhoto(
-        'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
+        __dirname + "/static/post/1.jpg",
         {
             caption: '1'
         }
     )
     ctx.replyWithPhoto(
-        'https://img2.goodfon.ru/wallpaper/nbig/7/ec/justdoit-dzhastduit-motivaciya.jpg',
+        __dirname + "/static/post/2.jpg",
         {
             caption: '2'
+        }
+    )
+    ctx.replyWithPhoto(
+        __dirname + "/static/post/3.jpg",
+        {
+            caption: '3'
+        }
+    )
+    ctx.replyWithPhoto(
+        __dirname + "/static/post/4.jpg",
+        {
+            caption: '4'
         }
     )
 
