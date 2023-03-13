@@ -31,15 +31,13 @@ bot.start(ctx => {
 
 
 bot.hears('ИНСТРУКЦИЯ', async ctx => {
-    let arr=["1.jpg","2.jpg","3.jpg","4.jpg"];
-    let p=[""]
+    let arr=["12.jpg","34.jpg"];
 
     for (let i of arr){
 
-
         await ctx.replyWithPhoto(
         ({source: fs.createReadStream(`./static/post/${i}`)}),
-        { caption: `№ ${i.slice(0,1)}` } )
+        { caption: `` } )
 
 }
 })
