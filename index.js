@@ -29,33 +29,21 @@ bot.start(ctx => {
     ctx.reply('Добро пожаловать в бот Пружанской ТЭЦ!',keyboard.reply())
 })
 
-bot.hears('ИНСТРУКЦИЯ', ctx => {
-    ctx.replyWithPhoto(
-        __dirname + "/static/post/1.jpg",
-        {
-            caption: '1'
-        }
-    )
-    ctx.replyWithPhoto(
-        __dirname + "/static/post/2.jpg",
-        {
-            caption: '2'
-        }
-    )
-    ctx.replyWithPhoto(
-        __dirname + "/static/post/3.jpg",
-        {
-            caption: '3'
-        }
-    )
-    ctx.replyWithPhoto(
-        __dirname + "/static/post/4.jpg",
-        {
-            caption: '4'
-        }
-    )
 
+bot.hears('ИНСТРУКЦИЯ', async ctx => {
+    let arr=["1.jpg","2.jpg","3.jpg","4.jpg"];
+    let p=[""]
+
+    for (let i of arr){
+
+
+        await ctx.replyWithPhoto(
+        ({source: fs.createReadStream(`./static/post/${i}`)}),
+        { caption: `№ ${i.slice(0,1)}` } )
+
+}
 })
+
 
 bot.on('text', async (ctx) => {
     ctx.reply('Извините, я пока не ChatGPT')
