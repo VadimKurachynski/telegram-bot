@@ -30,16 +30,15 @@ exports.ApiFilesDelete_get = (req, res) => {
     }
 };
 exports.ApiMessage_post = (req, res) => {
-console.log(req.body);
-    if(req.body.typemessage==="sutochnye"){
-        PostText(token,chatId,gsu.sutochnye(req.body));
-    }
-
-    if(req.body.typemessage==="prostomessage"){
-        PostText(token,chatId,gsu.prostomessage(req.body));
-    }
-
-    res.status(200).json({status: "ок"});
+    try {
+        if(req.body.typemessage==="sutochnye"){
+            PostText(token,chatId,gsu.sutochnye(req.body));
+        }
+        if(req.body.typemessage==="prostomessage"){
+            PostText(token,chatId,gsu.prostomessage(req.body));
+        }
+        res.status(200).json({status: "ок"});
+    }catch{ console.error("error")}
 }
 
 async function PostText(token, chatId, textSend) {
