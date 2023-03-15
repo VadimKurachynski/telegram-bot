@@ -27,12 +27,13 @@ bot.start(ctx => {
     ctx.reply('Добро пожаловать в бот Пружанской ТЭЦ!', keyboard.reply())
 })
 bot.hears('ИНСТРУКЦИЯ', async ctx => {
-    let arr = ["12.jpg", "34.jpg","5.jpg"];
+    let arr = ["12.jpg", "34.jpg"];
     for (let i of arr) {
         await ctx.replyWithPhoto(
             ({source: fs.createReadStream(`./static/post/${i}`)}),
             {caption: ``})
     }
+    ctx.reply('помни: В нашей работе не бывает мелочей!')
 })
 bot.on('text', async (ctx) => {
     ctx.reply('Извините, я пока не ChatGPT, текст не понимаю.')
