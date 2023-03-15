@@ -33,6 +33,7 @@ bot.hears('ИНСТРУКЦИЯ', async ctx => {
             ({source: fs.createReadStream(`./static/post/${i}`)}),
             {caption: ``})
     }
+    ctx.reply('Помните: в нашем деле не бывает мелочей!');
 })
 bot.on('text', async (ctx) => {
     ctx.reply('Извините, я пока не ChatGPT, текст не понимаю.')
