@@ -112,9 +112,7 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
         });
 
     }catch (e) {
-
     }
-
 });
 
 function downloadFile(url, filename, callback) {
