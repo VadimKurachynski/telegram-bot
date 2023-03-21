@@ -108,7 +108,6 @@ bot.on(['photo', 'document', 'video'], async (msg) => {
             }catch (e) {
                 console.log(e)
             }
-
         });
 
     }catch (e) {
